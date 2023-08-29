@@ -7,8 +7,16 @@ import { OpenAIModel } from '@/types/openai';
 
 import HomeContext from '@/pages/api/home/home.context';
 
+import { useCreateReducer } from '@/hooks/useCreateReducer';
+import { ModelSelectInitialState, initialState } from './ModelSelect.state';
+// import ModelNameContext from './ModelSelect.context';
+
 export const ModelSelect = () => {
   const { t } = useTranslation('chat');
+  
+  const { state: { modelName }, dispatch } = useCreateReducer<ModelSelectInitialState>({
+    initialState,
+  });
 
   const {
     state: { selectedConversation, models, defaultModelId },
@@ -16,7 +24,15 @@ export const ModelSelect = () => {
     dispatch: homeDispatch,
   } = useContext(HomeContext);
 
+  // const {
+  //   state: {
+  //     modelName
+  //   },
+  //   dispatch,
+  // } = contextValue;
+
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    dispatch({ field: 'modelName', value: e.target.value });
     selectedConversation &&
       handleUpdateConversation(selectedConversation, {
         key: 'model',

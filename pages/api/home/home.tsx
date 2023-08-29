@@ -30,7 +30,7 @@ import { getSettings } from '@/utils/app/settings';
 import { Conversation } from '@/types/chat';
 import { KeyValuePair } from '@/types/data';
 import { FolderInterface, FolderType } from '@/types/folder';
-import { OpenAIModelID, OpenAIModels, fallbackModelID } from '@/types/openai';
+import { OpenAIModelID, OpenAIModels, fallbackModelID, OpenAIModel } from '@/types/openai';
 import { Prompt } from '@/types/prompt';
 
 import { Chat } from '@/components/Chat/Chat';
@@ -41,6 +41,7 @@ import Promptbar from '@/components/Promptbar';
 import HomeContext from './home.context';
 import { HomeInitialState, initialState } from './home.state';
 
+import { useModelNameContext } from '../../../components/Chat/ModelSelect.context';
 import { v4 as uuidv4 } from 'uuid';
 
 import { useSession } from "next-auth/react";
@@ -62,6 +63,9 @@ const Home = ({
   const { getModels } = useApiService();
   const { getModelsError } = useErrorService();
   const [initialRender, setInitialRender] = useState<boolean>(true);
+
+  const modelName = useModelNameContext();
+  console.log(modelName)
 
   const contextValue = useCreateReducer<HomeInitialState>({
     initialState,
@@ -346,6 +350,8 @@ const Home = ({
       const cleanedSelectedConversation = cleanSelectedConversation(
         parsedSelectedConversation,
       );
+
+      // handleNewConversation();
 
       dispatch({
         field: 'selectedConversation',
